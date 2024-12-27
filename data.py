@@ -58,7 +58,7 @@ for i, (d, l) in enumerate(data):
     data[i] = (d, l)
 
 test_data = test_yes + test_no
-fixed_len  = 60000
+fixed_len = 60000
 for i, (d, l) in enumerate(test_data):
     if d.shape[0] < fixed_len:
         d = np.pad(d, (0, fixed_len - d.shape[0]), 'constant')
@@ -74,14 +74,14 @@ wav2vec_train = []
 wav2vec_test = []
 for d in data:
     audio, label = d
-    audio = audio.squeeze().to(device)
-    audio = processor(audio.unsqueeze(0), length=audio.size(1))[0]
+    audio = audio.to(device)
+    audio = processor(audio, length=fixed_len)[0]
     audio = encoder(audio)
     wav2vec_train.append((audio, label))
 for d in test_data:
     audio, label = d
-    audio = audio.squeeze().to(device)
-    audio = processor(audio.unsqueeze(0), length=audio.size(1))[0]
+    audio = audio.to(device)
+    audio = processor(audio, length=fixed_len)[0]
     audio = encoder(audio)
     wav2vec_test.append((audio, label))
 
