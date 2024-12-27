@@ -1,0 +1,3 @@
+[submodule "yesno_voice_recognition"]
+	path = yesno_voice_recognition
+	url = https://github.com/PerceptiLabs/yesno_voice_recognition
