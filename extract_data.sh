@@ -1,0 +1,13 @@
+python data.py 0
+python data.py 1
+python data.py 2
+python data.py 3
+python data.py 4
+python data.py 5
+python data.py 6
+python data.py 7
+python data.py 8
+python data.py 9
+python data.py 10
+python data.py 11
+python data.py 12
