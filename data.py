@@ -75,13 +75,13 @@ wav2vec_test = []
 for d in data:
     audio, label = d
     audio = audio.squeeze().to(device)
-    audio = processor(audio, length=audio.size(1))[0]
+    audio = processor(audio, length=audio.size(0))[0]
     audio = encoder(audio)
     wav2vec_train.append((audio, label))
 for d in test_data:
     audio, label = d
     audio = audio.squeeze().to(device)
-    audio = processor(audio, length=audio.size(1))[0]
+    audio = processor(audio, length=audio.size(0))[0]
     audio = encoder(audio)
     wav2vec_test.append((audio, label))
 
