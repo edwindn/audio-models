@@ -11,8 +11,8 @@ from torch.utils.data import Dataset, DataLoader
 from torchaudio.models import wav2vec2_base
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-MAX_FILES = 30
-assert len(sys.argv) == 2, 'Please specify the current run. Enter run number from 0 to 13'
+MAX_FILES = 20
+assert len(sys.argv) == 2, 'Please specify the current run. Enter run number from 0 to 20'
 run = int(sys.argv[1])
 
 wav2vec = wav2vec2_base().to(device)
@@ -30,7 +30,7 @@ sr = 44100
 lens = []
 
 print('Extracting audio files...')
-for i in range(390):
+for i in range(400):
     no, _ = load_wav_file(f'yesno_voice_recognition/train/no{i}.wav')
     no = librosa.resample(no, orig_sr=44100, target_sr=16000) # optional for direct model
     lens.append(no.shape[0])
