@@ -5,20 +5,12 @@ from scipy.io import wavfile
 from tqdm import tqdm
 import torch
 import torch.nn as nn
-from torch.utils.data import ConcatDataset, DataLoader
+from torch.utils.data import DataLoader
 from torchaudio.models import wav2vec2_base
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-
-files = [f'data/dataloader_{i}_wav2vec.pth' for i in range(20)] # up to 19
-train_loaders = []
-for file in files:
-    data = torch.load(file)
-    train_loaders.append(data.dataset)
-
-train_loader = ConcatDataset(train_loaders)
-train_loader = DataLoader(train_loader, shuffle=True, batch_size=16)
-test_loader = torch.load('data/dataloader_20_wav2vec.pth')
+train_loader = torch.load('data/train_loader_wav2vec.pth')
+test_loader = torch.load('data/test_loader_wav2vec.pth')
 
 class Net(nn.Module):
     def __init__(self):
