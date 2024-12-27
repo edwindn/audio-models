@@ -13,7 +13,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 #git clone https://github.com/PerceptiLabs/yesno_voice_recognition
 
-MAX_FILES = 28
+MAX_FILES = 30
 assert len(sys.argv) == 2, 'Please specify the current run.'
 run = sys.argv[1]
 
@@ -32,7 +32,7 @@ sr = 44100
 lens = []
 
 print('Extracting audio files...')
-for i in range(370):
+for i in range(390):
     no, _ = load_wav_file(f'yesno_voice_recognition/train/no{i}.wav')
     no = librosa.resample(no, orig_sr=44100, target_sr=16000) # optional for direct model
     lens.append(no.shape[0])
@@ -41,17 +41,6 @@ for i in range(370):
     yes = librosa.resample(yes, orig_sr=44100, target_sr=16000) # optional for direct model
     lens.append(yes.shape[0])
     yes_data.append((yes, 1))
-
-test_yes = []
-test_no = []
-
-for i in range(370, 400):
-    no, _ = load_wav_file(f'yesno_voice_recognition/train/no{i}.wav')
-    no = librosa.resample(no, orig_sr=44100, target_sr=16000) # optional for direct model
-    test_no.append((no, 0))
-    yes, _ = load_wav_file(f'yesno_voice_recognition/train/yes{i}.wav')
-    yes = librosa.resample(yes, orig_sr=44100, target_sr=16000) # optional for direct model
-    test_yes.append((yes, 1))
 
 data = yes_data + no_data
 
@@ -63,17 +52,7 @@ for i, (d, l) in enumerate(data):
         d = d[:fixed_len]
     data[i] = (d, l)
 
-test_data = test_yes + test_no
-fixed_len = 60000
-for i, (d, l) in enumerate(test_data):
-    if d.shape[0] < fixed_len:
-        d = np.pad(d, (0, fixed_len - d.shape[0]), 'constant')
-    else:
-        d = d[:fixed_len]
-    test_data[i] = (d, l)
-
 data = [(torch.tensor(d, dtype=torch.float32).unsqueeze(0), torch.tensor(l)) for d, l in data]
-test_data = [(torch.tensor(d, dtype=torch.float32).unsqueeze(0), torch.tensor(l)) for d, l in test_data]
 
 print('Encoding files...')
 os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
@@ -91,12 +70,9 @@ def process_audio(data):
         processed.append((audio, label))
     return processed
 
-wav2vec_train = process_audio(data)
-wav2vec_test = process_audio(test_data)
+wav2vec_train = process_audio(data[run*MAX_FILES:min(len(data), (run+1)*MAX_FILES)])
 
-dataloader = DataLoader(wav2vec_train, shuffle=True, batch_size=4)
-test_dataloader = DataLoader(wav2vec_test, shuffle=True, batch_size=4)
+dataloader = DataLoader(wav2vec_train, shuffle=True, batch_size=16)
 
-torch.save(dataloader, 'data/train_loader_wav2vec.pth')
-torch.save(test_dataloader, 'data/test_loader_wav2vec.pth')
+torch.save(dataloader, 'data/dataloader_wav2vec.pth')
 print('Files saved successfully.')
