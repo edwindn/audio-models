@@ -33,16 +33,18 @@ python data.py 26
 python data.py 27
 python data.py 28
 python data.py 29
-python data.py 30
 echo 'run 30/40'
+python data.py 30
 python data.py 31
 python data.py 32
 python data.py 33
 python data.py 34
-python data.py 35
 echo 'run 35/40'
+python data.py 35
 python data.py 36
 python data.py 37
 python data.py 38
 python data.py 39
 
+python data.py 100
+rm data/dataloader_*
