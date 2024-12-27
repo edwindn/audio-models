@@ -24,11 +24,11 @@ sr = 44100
 lens = []
 
 for i in range(370):
-    no, _ = load_wav_file(f'no{i}.wav')
+    no, _ = load_wav_file(f'yesno_voice_recognition/train/no{i}.wav')
     no = librosa.resample(no, orig_sr=44100, target_sr=16000) # optional for direct model
     lens.append(no.shape[0])
     no_data.append((no, 0))
-    yes, _ = load_wav_file(f'yes{i}.wav')
+    yes, _ = load_wav_file(f'yesno_voice_recognition/train/yes{i}.wav')
     yes = librosa.resample(yes, orig_sr=44100, target_sr=16000) # optional for direct model
     lens.append(yes.shape[0])
     yes_data.append((yes, 1))
