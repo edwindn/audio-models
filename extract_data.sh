@@ -47,4 +47,3 @@ python data.py 38
 python data.py 39
 
 python data.py 100
-rm data/dataloader_*
