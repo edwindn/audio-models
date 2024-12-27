@@ -74,18 +74,17 @@ print('Encoding files...')
 os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 wav2vec_train = []
 wav2vec_test = []
-def process_audio(data, batch_size=4):
-    wav2vec_train = []
-    for i in tqdm(range(0, len(data), batch_size)):
-        batch = data[i:min(i+batch_size, len(data))]
+def process_audio(data):
+    processed = []
+    for d in tqdm(data):
         torch.cuda.empty_cache()
-        for audio, label in batch:
-            audio = audio.to(device)
-            #with autocast():
-            audio = processor(audio, length=fixed_len)[0]
-            audio = encoder(audio)
-            wav2vec_train.append((audio, label))
-    return wav2vec_train
+        audio, label = d
+        audio = audio.to(device)
+        #with autocast():
+        audio = processor(audio, length=fixed_len)[0]
+        audio = encoder(audio)
+        processed.append((audio, label))
+    return processed
 
 wav2vec_train = process_audio(data)
 wav2vec_test = process_audio(test_data)
