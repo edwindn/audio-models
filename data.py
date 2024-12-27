@@ -12,7 +12,7 @@ from torchaudio.models import wav2vec2_base
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 MAX_FILES = 20
-assert len(sys.argv) == 2, 'Please specify the current run. Enter run number from 0 to 20'
+assert len(sys.argv) == 2, 'Please specify the current run'
 run = int(sys.argv[1])
 
 if run == 100:
