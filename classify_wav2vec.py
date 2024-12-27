@@ -12,6 +12,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 train_loader = torch.load('data/train_loader_wav2vec.pth')
 test_loader = torch.load('data/test_loader_wav2vec.pth')
 
+EPOCHS = 30
+
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
@@ -42,7 +44,7 @@ optimizer = torch.optim.Adam(net.parameters(), lr=0.0001)
 loss_fn = nn.CrossEntropyLoss()
 
 def train():
-    for epoch in range(20):
+    for epoch in range(EPOCHS):
         torch.cuda.empty_cache()
 
         print(f'Epoch {epoch}')
