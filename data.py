@@ -25,6 +25,7 @@ sr = 44100
 
 lens = []
 
+print('Extracting audio files...')
 for i in range(370):
     no, _ = load_wav_file(f'yesno_voice_recognition/train/no{i}.wav')
     no = librosa.resample(no, orig_sr=44100, target_sr=16000) # optional for direct model
@@ -68,7 +69,7 @@ for i, (d, l) in enumerate(test_data):
 data = [(torch.tensor(d, dtype=torch.float32).unsqueeze(0), torch.tensor(l)) for d, l in data]
 test_data = [(torch.tensor(d, dtype=torch.float32).unsqueeze(0), torch.tensor(l)) for d, l in test_data]
 
-
+print('Encoding files...')
 wav2vec_train = []
 wav2vec_test = []
 for d in data:
@@ -89,3 +90,4 @@ test_dataloader = DataLoader(wav2vec_test, shuffle=True, batch_size=4)
 
 torch.save(dataloader, 'data/train_loader_wav2vec.pth')
 torch.save(test_dataloader, 'data/test_loader_wav2vec.pth')
+print('Files saved successfully.')
