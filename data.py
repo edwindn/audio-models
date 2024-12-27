@@ -15,7 +15,7 @@ MAX_FILES = 20
 assert len(sys.argv) == 2, 'Please specify the current run. Enter run number from 0 to 20'
 run = int(sys.argv[1])
 
-if run = 100:
+if run == 100:
     files = [f'data/dataloader_{i}_wav2vec.pth' for i in range(39)] # up to 38
     train_loaders = []
     for file in files:
