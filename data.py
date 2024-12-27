@@ -72,5 +72,5 @@ wav2vec_train = process_audio(data[run*MAX_FILES:min(len(data), (run+1)*MAX_FILE
 
 dataloader = DataLoader(wav2vec_train, shuffle=True, batch_size=16)
 
-torch.save(dataloader, 'data/dataloader_wav2vec.pth')
+torch.save(dataloader, f'data/dataloader_{run}_wav2vec.pth')
 print('Files saved successfully.')
