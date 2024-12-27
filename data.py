@@ -8,6 +8,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 from torchaudio.models import wav2vec2_base
+from torch.cuda.amp import autocast
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 #git clone https://github.com/PerceptiLabs/yesno_voice_recognition
@@ -74,20 +75,21 @@ print('Encoding files...')
 os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 wav2vec_train = []
 wav2vec_test = []
-for d in tqdm(data):
-    torch.cuda.empty_cache()
-    audio, label = d
-    audio = audio.to(device)
-    audio = processor(audio, length=fixed_len)[0]
-    audio = encoder(audio)
-    wav2vec_train.append((audio, label))
-for d in tqdm(test_data):
-    torch.cuda.empty_cache()
-    audio, label = d
-    audio = audio.to(device)
-    audio = processor(audio, length=fixed_len)[0]
-    audio = encoder(audio)
-    wav2vec_test.append((audio, label))
+def process_audio(data, batch_size=4):
+    wav2vec_train = []
+    for i in tqdm(range(0, len(data), batch_size)):
+        batch = data[i:min(i+batch_size, len(data))]
+        torch.cuda.empty_cache()
+        for audio, label in batch:
+            audio = audio.to(device)
+            with autocast():
+                audio = processor(audio, length=fixed_len)[0]
+                audio = encoder(audio)
+            wav2vec_train.append((audio, label))
+    return wav2vec_train
+
+wav2vec_train = process_audio(data)
+wav2vec_test = process_audio(test_data)
 
 dataloader = DataLoader(wav2vec_train, shuffle=True, batch_size=4)
 test_dataloader = DataLoader(wav2vec_test, shuffle=True, batch_size=4)
