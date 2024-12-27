@@ -8,7 +8,6 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 from torchaudio.models import wav2vec2_base
-from torch.cuda.amp import autocast
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 #git clone https://github.com/PerceptiLabs/yesno_voice_recognition
@@ -82,9 +81,9 @@ def process_audio(data, batch_size=4):
         torch.cuda.empty_cache()
         for audio, label in batch:
             audio = audio.to(device)
-            with autocast():
-                audio = processor(audio, length=fixed_len)[0]
-                audio = encoder(audio)
+            #with autocast():
+            audio = processor(audio, length=fixed_len)[0]
+            audio = encoder(audio)
             wav2vec_train.append((audio, label))
     return wav2vec_train
 
