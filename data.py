@@ -40,10 +40,10 @@ test_yes = []
 test_no = []
 
 for i in range(370, 400):
-    no, _ = load_wav_file(f'no{i}.wav')
+    no, _ = load_wav_file(f'yesno_voice_recognition/train/no{i}.wav')
     no = librosa.resample(no, orig_sr=44100, target_sr=16000) # optional for direct model
     test_no.append((no, 0))
-    yes, _ = load_wav_file(f'yes{i}.wav')
+    yes, _ = load_wav_file(f'yesno_voice_recognition/train/yes{i}.wav')
     yes = librosa.resample(yes, orig_sr=44100, target_sr=16000) # optional for direct model
     test_yes.append((yes, 1))
 
