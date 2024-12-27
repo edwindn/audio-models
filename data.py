@@ -71,7 +71,7 @@ data = [(torch.tensor(d, dtype=torch.float32).unsqueeze(0), torch.tensor(l)) for
 test_data = [(torch.tensor(d, dtype=torch.float32).unsqueeze(0), torch.tensor(l)) for d, l in test_data]
 
 print('Encoding files...')
-os.os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 wav2vec_train = []
 wav2vec_test = []
 for d in tqdm(data):
