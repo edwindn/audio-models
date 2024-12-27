@@ -7,13 +7,27 @@ import os
 import torch
 import torch.nn as nn
 import sys
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset, DataLoader, ConcatDataset
 from torchaudio.models import wav2vec2_base
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 MAX_FILES = 20
 assert len(sys.argv) == 2, 'Please specify the current run. Enter run number from 0 to 20'
 run = int(sys.argv[1])
+
+if run = 100:
+    files = [f'data/dataloader_{i}_wav2vec.pth' for i in range(39)] # up to 38
+    train_loaders = []
+    for file in files:
+        data = torch.load(file)
+        train_loaders.append(data.dataset)
+    
+    train_loader = ConcatDataset(train_loaders)
+    train_loader = DataLoader(train_loader, shuffle=True, batch_size=16)
+    test_loader = torch.load('data/dataloader_39_wav2vec.pth')
+    torch.save(train_loader, 'data/train_loader_wav2vec.pth')
+    torch.save(test_loader, 'data/test_loader_wav2vec.pth')
+    quit()
 
 wav2vec = wav2vec2_base().to(device)
 processor = wav2vec.feature_extractor
