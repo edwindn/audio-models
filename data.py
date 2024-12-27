@@ -3,6 +3,7 @@ import librosa
 import matplotlib.pyplot as plt
 from scipy.io import wavfile
 from tqdm import tqdm
+import os
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
@@ -70,15 +71,18 @@ data = [(torch.tensor(d, dtype=torch.float32).unsqueeze(0), torch.tensor(l)) for
 test_data = [(torch.tensor(d, dtype=torch.float32).unsqueeze(0), torch.tensor(l)) for d, l in test_data]
 
 print('Encoding files...')
+os.os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 wav2vec_train = []
 wav2vec_test = []
-for d in data:
+for d in tqdm(data):
+    torch.cuda.empty_cache()
     audio, label = d
     audio = audio.to(device)
     audio = processor(audio, length=fixed_len)[0]
     audio = encoder(audio)
     wav2vec_train.append((audio, label))
-for d in test_data:
+for d in tqdm(test_data):
+    torch.cuda.empty_cache()
     audio, label = d
     audio = audio.to(device)
     audio = processor(audio, length=fixed_len)[0]
