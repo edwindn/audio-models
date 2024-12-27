@@ -11,11 +11,9 @@ from torch.utils.data import Dataset, DataLoader
 from torchaudio.models import wav2vec2_base
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-#git clone https://github.com/PerceptiLabs/yesno_voice_recognition
-
 MAX_FILES = 30
-assert len(sys.argv) == 2, 'Please specify the current run.'
-run = sys.argv[1]
+assert len(sys.argv) == 2, 'Please specify the current run. Enter run number from 0 to 13'
+run = int(sys.argv[1])
 
 wav2vec = wav2vec2_base().to(device)
 processor = wav2vec.feature_extractor
