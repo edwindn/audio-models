@@ -41,7 +41,8 @@ class Net(nn.Module):
         ).to(device)
     
     def forward(self, x):
-        x = x.to(device).unsqueeze(1)
+        x = x.to(device)
+        x = x.squeeze().unsqueeze(1)
         return self.main(x)
     
 net = Net()
